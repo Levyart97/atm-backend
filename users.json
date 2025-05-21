@@ -1,0 +1,6 @@
+[
+  { "username": "arya", "password": "arya123", "role": "staff" },
+  { "username": "Alvan", "password": "alvan123", "role": "Kabag" },
+  { "username": "Rizal", "password": "rizal123", "role": "TB" },
+  { "username": "angga", "password": "angga123", "role": "monitoring" }
+]
