@@ -12,19 +12,31 @@ app.post('/login', (req, res) => {
   const { username, password } = req.body;
 
   fs.readFile('users.json', 'utf8', (err, data) => {
-    if (err) return res.status(500).json({ message: 'Server error' });
+    if (err) {
+      console.error('Gagal membaca users.json:', err);
+      return res.status(500).json({ message: 'Server error saat membaca data user.' });
+    }
 
-    const users = JSON.parse(data);
+    let users = [];
+    try {
+      users = JSON.parse(data);
+    } catch (parseErr) {
+      console.error('Gagal parsing users.json:', parseErr);
+      return res.status(500).json({ message: 'Format users.json tidak valid.' });
+    }
+
     const user = users.find(u => u.username === username && u.password === password);
 
     if (!user) {
-      return res.status(401).json({ message: 'Invalid credentials' });
+      console.log(`Login gagal untuk username: ${username}`);
+      return res.status(401).json({ message: 'Username atau password salah.' });
     }
 
-    res.json({ message: 'Login success', role: user.role });
+    console.log(`Login berhasil untuk username: ${username}, role: ${user.role}`);
+    res.json({ message: 'Login berhasil', role: user.role });
   });
 });
 
 app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
+  console.log(`✅ Server running on port ${PORT}`);
 });
